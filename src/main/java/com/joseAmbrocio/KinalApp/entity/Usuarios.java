@@ -18,14 +18,14 @@ public class Usuarios {
         @GeneratedValue: agrega un id automaticamente y ya no
         hay que hacerlo manualmente
      */
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     /*
         @Column: sirve para decirle a la base de datos que es una
         columna
      */
     @Column(name = "codigo_usuario")
-    private int codigoUsuario;
+    private Integer codigoUsuario;
     @Column
     private String username;
     @Column
@@ -35,7 +35,7 @@ public class Usuarios {
     @Column
     private String rol;
     @Column
-    private int estado;
+    private Integer estado;
 
     /*
         Creamos el constructor vacío
@@ -46,7 +46,7 @@ public class Usuarios {
     /*
         Creamos el constructor con parametros llenos
      */
-    public Usuarios(int estado, String rol, String email, String password, String username, int codigoUsuario) {
+    public Usuarios(Integer estado, String rol, String email, String password, String username, Integer codigoUsuario) {
         this.estado = estado;
         this.rol = rol;
         this.email = email;
@@ -58,11 +58,11 @@ public class Usuarios {
     /*
         getters y setters
      */
-    public int getCodigoUsuario() {
+    public Integer getCodigoUsuario() {
         return codigoUsuario;
     }
 
-    public void setCodigoUsuario(int codigoUsuario) {
+    public void setCodigoUsuario(Integer codigoUsuario) {
         this.codigoUsuario = codigoUsuario;
     }
 
@@ -98,11 +98,11 @@ public class Usuarios {
         this.rol = rol;
     }
 
-    public int getEstado() {
+    public Integer getEstado() {
         return estado;
     }
 
-    public void setEstado(int estado) {
+    public void setEstado(Integer estado) {
         this.estado = estado;
     }
 }
