@@ -25,7 +25,7 @@ public class Usuarios {
         columna
      */
     @Column(name = "codigo_usuario")
-    private Integer codigoUsuario;
+    private Long codigoUsuario;
     @Column
     private String username;
     @Column
@@ -35,7 +35,8 @@ public class Usuarios {
     @Column
     private String rol;
     @Column
-    private Integer estado;
+    //Long gasta mucha memoria por eso seria mejor un int
+    private Long estado;
 
     /*
         Creamos el constructor vacío
@@ -46,23 +47,21 @@ public class Usuarios {
     /*
         Creamos el constructor con parametros llenos
      */
-    public Usuarios(Integer estado, String rol, String email, String password, String username, Integer codigoUsuario) {
-        this.estado = estado;
-        this.rol = rol;
-        this.email = email;
-        this.password = password;
-        this.username = username;
+
+    public Usuarios(Long codigoUsuario, String username, String password, String email, String rol, Long estado) {
         this.codigoUsuario = codigoUsuario;
+        this.username = username;
+        this.password = password;
+        this.email = email;
+        this.rol = rol;
+        this.estado = estado;
     }
 
-    /*
-        getters y setters
-     */
-    public Integer getCodigoUsuario() {
+    public Long getCodigoUsuario() {
         return codigoUsuario;
     }
 
-    public void setCodigoUsuario(Integer codigoUsuario) {
+    public void setCodigoUsuario(Long codigoUsuario) {
         this.codigoUsuario = codigoUsuario;
     }
 
@@ -98,11 +97,11 @@ public class Usuarios {
         this.rol = rol;
     }
 
-    public Integer getEstado() {
+    public Long getEstado() {
         return estado;
     }
 
-    public void setEstado(Integer estado) {
+    public void setEstado(Long estado) {
         this.estado = estado;
     }
 }
