@@ -1,15 +1,29 @@
 package com.joseAmbrocio.KinalApp.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
+/*
+    @Entity: sirve para que sepa que es una en entidad
+    y no se la salte la base de datos
+ */
 @Entity
-@Table
+/*
+    @Table: sirve para decirle que es una tabla en la base de datos
+ */
+@Table(name = "usuarios")
 public class Usuarios {
 
+    /*
+        @Id: sirve para identificar que es la llave primaria
+        @GeneratedValue: agrega un id automaticamente y ya no
+        hay que hacerlo manualmente
+     */
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Id
+    /*
+        @Column: sirve para decirle a la base de datos que es una
+        columna
+     */
     @Column(name = "codigo_usuario")
     private int codigoUsuario;
     @Column
@@ -18,13 +32,20 @@ public class Usuarios {
     private String password;
     @Column
     private String email;
-    
+    @Column
     private String rol;
+    @Column
     private int estado;
 
+    /*
+        Creamos el constructor vacío
+     */
     public Usuarios() {
     }
 
+    /*
+        Creamos el constructor con parametros llenos
+     */
     public Usuarios(int estado, String rol, String email, String password, String username, int codigoUsuario) {
         this.estado = estado;
         this.rol = rol;
@@ -34,6 +55,9 @@ public class Usuarios {
         this.codigoUsuario = codigoUsuario;
     }
 
+    /*
+        getters y setters
+     */
     public int getCodigoUsuario() {
         return codigoUsuario;
     }
