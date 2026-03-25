@@ -34,8 +34,9 @@ public class UsuarioService implements IUsuarioService {
     @Override
     public Usuarios guardar(Usuarios usuario) {
         validarUsuario(usuario);
-        if (usuario.getEstado()==0)
+        if (usuario.getEstado()==0) {
             usuario.setEstado(1);
+        }
         return usuarioRepository.save(usuario);
     }
 
@@ -79,13 +80,13 @@ public class UsuarioService implements IUsuarioService {
     //Metodo ValidarUsuario
     private  void validarUsuario(Usuarios usuario){
         if(usuario.getUsername() ==null || usuario.getUsername().trim().isEmpty() ){
-            throw new RuntimeException("El username es obligatorio");
+            throw new IllegalArgumentException("El username es obligatorio");
         }
         if(usuario.getEmail() ==null || usuario.getEmail().trim().isEmpty() ){
-            throw new RuntimeException("El email es obligatorio");
+            throw new IllegalArgumentException("El email es obligatorio");
         }
         if(usuario.getPassword() == null || usuario.getPassword().trim().isEmpty()){
-            throw new RuntimeException("La contraseña es obligatorio");
+            throw new IllegalArgumentException("La contraseña es obligatorio");
         }
     }
 }
