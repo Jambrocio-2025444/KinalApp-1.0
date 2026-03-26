@@ -35,7 +35,7 @@ public class UsuarioService implements IUsuarioService {
     public Usuarios guardar(Usuarios usuario) {
         validarUsuario(usuario);
         if (usuario.getEstado()==0) {
-            usuario.setEstado(1);
+            usuario.setEstado(1L);
         }
         return usuarioRepository.save(usuario);
     }
@@ -51,7 +51,7 @@ public class UsuarioService implements IUsuarioService {
         if (!usuarioRepository.existsById(codigoUsuario)){
             throw new RuntimeException("Usuario no encontrado " + codigoUsuario);
         }
-        usuario.setCodigoUsuario(codigoUsuario);
+        usuario.setCodigoUsuario((long)codigoUsuario);
         validarUsuario(usuario);
 
         return usuarioRepository.save(usuario);
