@@ -5,7 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
-public interface UsuarioRepository extends JpaRepository <Usuarios,Integer> {
+public interface UsuarioRepository extends JpaRepository <Usuarios,Long> {
     List<Usuarios> findByEstado(int estado);
 
 }
