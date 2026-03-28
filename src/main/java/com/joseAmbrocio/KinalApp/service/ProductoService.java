@@ -35,12 +35,12 @@ public class ProductoService implements IProductoService{
     @Override
     @Transactional(readOnly = true)
     public Optional<Producto> buscarPorId(int codigoProducto) {
-        return productoRepository.findById(codigoProducto);
+        return productoRepository.findById((long)codigoProducto);
     }
 
     @Override
     public Producto actualizar(int codigoProducto, Producto producto) {
-        if (!productoRepository.existsById(codigoProducto)) {
+        if (!productoRepository.existsById((long)codigoProducto)) {
             throw new RuntimeException(" No se encontro el producto" + codigoProducto);
         }
         producto.setCodigoProducto((long) codigoProducto);
@@ -52,15 +52,15 @@ public class ProductoService implements IProductoService{
 
     @Override
     public void eliminar(int codigoProducto) {
-    if(!productoRepository.existsById(codigoProducto)) {
+    if(!productoRepository.existsById((long)codigoProducto)) {
         throw new RuntimeException(" No se encontro el producto" + codigoProducto);
     }
-     productoRepository.deleteById(codigoProducto);
+     productoRepository.deleteById((long)codigoProducto);
     }
 
     @Override
     public boolean existePorId(int codigoProducto) {
-        return productoRepository.existsById(codigoProducto);
+        return productoRepository.existsById((long)codigoProducto);
     }
 
     @Override
@@ -70,7 +70,7 @@ public class ProductoService implements IProductoService{
 
     @Override
     public List<String> listarStock() {
-        //Use expresiones lambda para el listarStock ya que era más practico 
+        //Use expresiones lambda para el listarStock ya que era más practico
         return productoRepository.findAll()
                 .stream()
                 .map(p -> " Producto " + p.getNombreProducto() + ", Stock: " + p.getStock())
