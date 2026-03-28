@@ -41,8 +41,8 @@ public class Usuarios {
     //Long gasta mucha memoria por eso seria mejor un int
     private int estado;
 
-    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    JsonIgnore
+    @OneToMany(mappedBy = "usuario")
+    @JsonIgnore
     private List<Ventas> venta;
 
     /*
