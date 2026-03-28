@@ -1,6 +1,9 @@
 package com.joseAmbrocio.KinalApp.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+
+import java.util.List;
 
 /*
     @Entity: sirve para que sepa que es una en entidad
@@ -26,17 +29,21 @@ public class Usuarios {
      */
     @Column(name = "codigo_usuario")
     private Long codigoUsuario;
-    @Column
+    @Column (nullable = false)
     private String username;
-    @Column
+    @Column (nullable = false)
     private String password;
-    @Column
+    @Column (nullable = false)
     private String email;
-    @Column
+    @Column (nullable = false)
     private String rol;
-    @Column
+    @Column (nullable = false)
     //Long gasta mucha memoria por eso seria mejor un int
-    private Long estado;
+    private int estado;
+
+    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    JsonIgnore
+    private List<Ventas> venta;
 
     /*
         Creamos el constructor vacío
@@ -48,7 +55,7 @@ public class Usuarios {
         Creamos el constructor con parametros llenos
      */
 
-    public Usuarios(Long codigoUsuario, String username, String password, String email, String rol, Long estado) {
+    public Usuarios(Long codigoUsuario, String username, String password, String email, String rol, int estado) {
         this.codigoUsuario = codigoUsuario;
         this.username = username;
         this.password = password;
@@ -97,11 +104,19 @@ public class Usuarios {
         this.rol = rol;
     }
 
-    public Long getEstado() {
+    public int getEstado() {
         return estado;
     }
 
-    public void setEstado(Long estado) {
+    public void setEstado(int estado) {
         this.estado = estado;
+    }
+
+    public List<Ventas> getVenta() {
+        return venta;
+    }
+
+    public void setVenta(List<Ventas> venta) {
+        this.venta = venta;
     }
 }
