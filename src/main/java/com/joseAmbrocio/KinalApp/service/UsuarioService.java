@@ -35,30 +35,31 @@ public class UsuarioService implements IUsuarioService {
     public Usuarios guardar(Usuarios usuario) {
         validarUsuario(usuario);
         if (usuario.getEstado()==0) {
-            usuario.setEstado(1L);
+            usuario.setEstado(1);
         }
         return usuarioRepository.save(usuario);
     }
 
     @Override
     @Transactional(readOnly = true)
-    public Optional<Usuarios> buscarPorId(int codigoUsuario) {
+    public Optional<Usuarios> buscarPorId(Long codigoUsuario) {
         return usuarioRepository.findById(codigoUsuario);
     }
 
+
     @Override
-    public Usuarios actualizar(int codigoUsuario, Usuarios usuario) {
+    public Usuarios actualizar(Long codigoUsuario, Usuarios usuario) {
         if (!usuarioRepository.existsById(codigoUsuario)){
             throw new RuntimeException("Usuario no encontrado " + codigoUsuario);
         }
-        usuario.setCodigoUsuario((long)codigoUsuario);
+        usuario.setCodigoUsuario(codigoUsuario);
         validarUsuario(usuario);
 
         return usuarioRepository.save(usuario);
     }
 
     @Override
-    public void eliminar(int codigoUsuario) {
+    public void eliminar(Long codigoUsuario) {
         if(!usuarioRepository.existsById(codigoUsuario)){
             throw new RuntimeException("Usuario no encontrado " + codigoUsuario);
         }
@@ -68,12 +69,13 @@ public class UsuarioService implements IUsuarioService {
 
     @Override
     @Transactional(readOnly = true)
-    public boolean existePorId(int codigoUsuario) {
+    public boolean existePorId(Long codigoUsuario) {
         return usuarioRepository.existsById(codigoUsuario);
     }
 
     @Override
     public List<Usuarios> activo() {
+
         return usuarioRepository.findByEstado(1);
     }
 

@@ -13,16 +13,16 @@ public interface IUsuarioService {
     Usuarios guardar(Usuarios usuario);
 
     //Metodo que busca un usuario por su codigoUsuario
-    Optional<Usuarios> buscarPorId(int codigoUsuario);
+    Optional<Usuarios> buscarPorId(Long codigoUsuario);
 
     //Metodo que actualiza por codigoUsuario
-    Usuarios actualizar(int codigoUsuario, Usuarios usuario);
+    Usuarios actualizar(Long codigoUsuario, Usuarios usuario);
 
     //Metodo que elimina un usuario por codigoUsuario
-    void eliminar(int codigoUsuario);
+    void eliminar(Long codigoUsuario);
 
     //Metodo que devuelve true si existe o false si no
-    boolean existePorId(int codigoUsuario);
+    boolean existePorId(Long codigoUsuario);
 
     //Metodo que dice si usuario esta activo o no
     List<Usuarios> activo();
