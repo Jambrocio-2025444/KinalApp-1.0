@@ -1,9 +1,9 @@
 package com.joseAmbrocio.KinalApp.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.*;
+
+import java.util.List;
 
 @Entity
 @Table(name = "clientes")
@@ -11,25 +11,30 @@ public class Cliente {
     @Id
     @Column(name = "dpi_cliente")
     private String DPICliente;
-    @Column
+    @Column (nullable = false)
     private String nombreCliente;
-    @Column
+    @Column (nullable = false)
     private String apellidoCliente;
-    @Column
+    @Column (nullable = false)
     private String direccion;
-    @Column
+    @Column (nullable = false)
     private int estado;
+
+    @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JsonIgnore
+    private List<Ventas> venta;
 
     public Cliente(){
 
     }
 
-    public Cliente(String DPICliente, String nombreCliente, String apellidoCliente, String direccion, int estado) {
+    public Cliente(String DPICliente, String nombreCliente, String apellidoCliente, String direccion, int estado, List<Ventas> venta) {
         this.DPICliente = DPICliente;
         this.nombreCliente = nombreCliente;
         this.apellidoCliente = apellidoCliente;
         this.direccion = direccion;
         this.estado = estado;
+        this.venta = venta;
     }
 
     public String getDPICliente() {
@@ -70,5 +75,13 @@ public class Cliente {
 
     public void setEstado(int estado) {
         this.estado = estado;
+    }
+
+    public List<Ventas> getVenta() {
+        return venta;
+    }
+
+    public void setVenta(List<Ventas> venta) {
+        this.venta = venta;
     }
 }
