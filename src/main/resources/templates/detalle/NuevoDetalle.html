@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{fragments/menu :: main}">
+
+<th:block th:fragment="content">
+    <div class="page-header">
+        <h2><i class="bi bi-plus-circle"></i> Nuevo Detalle de Venta</h2>
+        <a href="/detalles" class="btn btn-secondary">
+            <i class="bi bi-arrow-left"></i> Volver
+        </a>
+    </div>
+
+    <div class="card">
+        <div class="card-body">
+            <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
+
+            <form action="/detalles/guardar" method="post" th:object="${detalle}">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Venta:</label>
+                        <select name="ventas.codigoVenta" class="form-control" required>
+                            <option value="">-- Seleccione una venta --</option>
+                            <option th:each="ve : ${venta}" th:value="${ve.codigoVenta}" th:text="'Venta #' + ${ve.codigoVenta}"></option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Producto:</label>
+                        <select name="producto.codigoProducto" class="form-control" required>
+                            <option value="">-- Seleccione un Producto --</option>
+                            <option th:each="pro : ${producto}" th:value="${pro.codigoProducto}" th:text="${pro.nombreProducto}"></option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Cantidad:</label>
+                        <input type="number" name="cantidad" class="form-control" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Precio Unitario:</label>
+                        <input type="number" step="0.01" name="precioUnitario" class="form-control" required>
+                    </div>
+                </div>
+
+                <div class="form-preview">
+                    Subtotal: <span id="subtotal">0.00</span>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="bi bi-save"></i> Guardar
+                    </button>
+                    <a href="/detalles" class="btn btn-secondary">
+                        <i class="bi bi-x-circle"></i> Cancelar
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</th:block>
+
+</html>

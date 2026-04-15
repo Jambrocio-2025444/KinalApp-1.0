@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{fragments/menu :: main}">
+
+<th:block th:fragment="content">
+    <div class="page-header">
+        <h2><i class="bi bi-search"></i> Resultado de Búsqueda</h2>
+        <div>
+            <a href="/ventas" class="btn btn-secondary">
+                <i class="bi bi-arrow-left"></i> Volver
+            </a>
+            <a href="/ventas/BuscarVenta" class="btn btn-primary">
+                <i class="bi bi-search"></i> Nueva Búsqueda
+            </a>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-body">
+            <div th:if="${encontrado == true}">
+                <h3 class="text-success mb-3">
+                    <i class="bi bi-check-circle-fill"></i> Venta encontrada:
+                </h3>
+                <div class="table-responsive">
+                    <table class="table">
+                        <tbody>
+                        <tr>
+                            <th width="150">Código:</th>
+                            <td th:text="${venta.codigoVenta}">—</td>
+                        </tr>
+                        <tr>
+                            <th>Cliente:</th>
+                            <td th:text="${venta.cliente.nombreCliente}">—</td>
+                        </tr>
+                        <tr>
+                            <th>Usuario:</th>
+                            <td th:text="${venta.usuario.username}">—</td>
+                        </tr>
+                        <tr>
+                            <th>Fecha:</th>
+                            <td th:text="${venta.fechaVenta}">—</td>
+                        </tr>
+                        <tr>
+                            <th>Total:</th>
+                            <td th:text="${venta.total}">—</td>
+                        </tr>
+                        <tr>
+                            <th>Estado:</th>
+                            <td>
+                                <span th:if="${venta.estado == 1}" class="badge bg-success">Activo</span>
+                                <span th:unless="${venta.estado == 1}" class="badge bg-danger">Inactivo</span>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="form-actions">
+                    <a th:href="@{/ventas/editar/{codigoVenta}(codigoVenta=${venta.codigoVenta})}"
+                       class="btn btn-warning">
+                        <i class="bi bi-pencil"></i> Editar
+                    </a>
+                </div>
+            </div>
+
+            <div th:if="${encontrado == false}" class="alert alert-danger">
+                <i class="bi bi-exclamation-triangle-fill"></i>
+                <span th:text="${mensaje}"></span>
+            </div>
+        </div>
+    </div>
+</th:block>
+
+</html>
