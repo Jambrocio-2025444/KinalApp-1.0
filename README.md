@@ -1,83 +1,104 @@
-# KinalApp
- 
-Documentación del Proyecto
-En el sigueinte proyecto se realizo una API REST construida con tecnologías modernas. Su principla función es gestionar el ciclo de ventas de un negocio, permitiendo realizar operaciones CRUD (Crear, Leer, Actualizar y Eliminar) sobre entidades importantes como clientes, usuarios, productos, ventas y detalleVentas.
+KinalApp
+Descripción del Proyecto
+
+KinalApp es una aplicación web desarrollada con tecnologías modernas del ecosistema Java utilizando Spring Boot. Su propósito principal es gestionar el ciclo completo de ventas de un negocio, permitiendo realizar operaciones CRUD (Crear, Leer, Actualizar y Eliminar) sobre entidades clave como:
+
+Clientes
+Productos
+Usuarios
+Ventas
+Detalle de ventas
+La aplicación implementa una arquitectura basada en el patrón MVC (Modelo - Vista - Controlador) e integra tanto backend como frontend por medio de  Thymeleaf.
 
 Análisis de los Componentes
-* Herramientas Principales: Usamos las versiones más modernas de Java y Spring Boot. Esto hace que el programa sea rápido, seguro y más fácil de programar.
-* Base de Datos y Organización: Toda la información se guarda en MySQL (como una gran hoja de Excel). Usamos Maven para que se encargue de descargar y   organizar todas las herramientas extra que el código necesita.
-* Estructura de Endpoints: La aplicación sigue una lógica de recursos muy clara:
-* Gestina el inventario: Control de productos y monitoreo de stock.
-* Gestiona las Ventas: Registro detallado de transacciones (Venta y DetalleVenta), lo cual indica que puede manejar múltiples productos por cada factura.
-* Control: Gestión de usuarios y estados de actividad (filtros para ver solo registros "activos").
+Stack Tecnológico: Utiliza las versiones más recientes y estables del mercado. Java 21 ofrece las últimas mejoras de rendimiento, mientras que Spring Boot 4 facilita la configuración automática y el despliegue rápido.
+Arquitectura de Datos: Se apoya en MySQL para el almacenamiento de datos y Maven para manejar todas las librerías necesarias.
+Estructura de Endpoints: La aplicación sigue una lógica de recursos muy clara:
+Gestión de Inventario: Control de productos y monitoreo de stock.
+Gestión de Ventas: Registro detallado de transacciones (Venta y DetalleVenta), lo cual indica que puede manejar múltiples productos por cada factura.
+Seguridad/Control: Gestión de usuarios y estados de actividad (filtros para ver solo registros "activos").
+Arquitectura de Datos
+El sistema utiliza MySQL como base de datos relacional y está estructurado en capas:
 
+Entity → Representación de tablas
+Repository → Acceso a datos 
+Service → Lógica de negocio
+Controller → Manejo de peticiones HTTP
 Flujo de Trabajo (Instalación)
 El proceso descrito es el estándar para un desarrollador:
 
-* Preparación del entorno: Asegurar que el motor de base de datos y el kit de desarrollo (JDK) estén listos.
-* Sincronización: Clonar el código desde el repositorio de GitHub.
-* Configuración: Es vital el paso de revisar el archivo application.properties, ya que ahí se define la conexión a la base de datos y el puerto de red (en este caso, el 8081).
-* Pruebas: Se sugiere el uso de Postman o el navegador para interactuar con los datos a través de las URLs (por ejemplo, para ver la lista de clientes).
-
-## Tecnologias utilizadas
-* **Java 21**
-* **Spring Boot 4.0.2**
-* **Maven** (Gestor de dependencias)
-* **MySQL** (Sistema gestor de Base de Datos)
-
-## Requisitos Previos
-Antes de ejecutar la aplicación debe tener instalado:
-* JDK 17 o superior
-* Maven instalado
-* Una instancia activa en MySQL
+Preparación del entorno: Asegurar que el motor de base de datos y el kit de desarrollo (JDK) estén listos.
+Sincronización: Clonar el código desde el repositorio de GitHub.
+Configuración: Es vital el paso de revisar el archivo application.properties, ya que ahí se define la conexión a la base de datos y el puerto de red (en este caso, el 8081).
+Pruebas: Usar el navegador para interactuar con los datos a través de las URLs.
+Tecnologias utilizadas
+Java 21
+Spring Boot 4.0.2
+Maven (Gestor de dependencias)
+MySQL (Base de Datos)
+Requisitos Previos
+Antes de ejecutar la aplicación debe tener instalado: * JDK 17 o superior * Maven instalado * Una instancia activa en MySQL
 
 Instalaciones opcionales
-* Postman
+Postman
+Instalación y Ejecución
+Clonar repositorio https://github.com/Jambrocio-2025444/KinalApp-1.0.git
+Abrir Intellij IDEA.
+Abrir la carpeta que clono.
+Abrir MySQL en su ordenador.
+Regresar a Intellij IDEA.
+Dirigirse a la carpeta "src\main\java\com\joseambrocio".
+Dirirgirse a KinalAppApplication y ejecutar la aplicación.
+Abrir la carpeta "resources/application.properties".
+Verificar que puerto está utilizando la aplicación.
+Abrir el navegador y poner el puerto http://localhost:8081/
+Aparecera un Login el cual es para registrar un usuario(en caso de no tener uno se puede crear)
+Endpoints
+**************************************************
+clientes
+/clientes → lista todos los clientes existentes
+/clientes/NuevoCliente → Crea un nuevo cliente
+/clientes/BuscarCliente → Busca el dpi del cliente
+/clientes/buscar → El resultado si el cliente existe
+/clientes/editar/  → Editar al cliente existente
+/clientes/activos → Los clientes que estan activos
+*****************************************************
+usuarios
+/usuarios → lista todos los usuarios existentes
+/usuarios/NuevoUsuario → Crea un nuevo usuario
+/usuarios/BuscarUsuario → Busca el id (código) del usuario
+/usuarios/buscar  → El resultado si el cliente existe
+/usuarios/editar/ → Edita un usuario existente
+*********************************************************
+productos
+/productos → lista todos los prodcutos existentes
+/productos/NuevoProducto → Crea un nuevo producto
+/productos/BuscarProducto → Busca el id (código) del producto
+/productos/buscar → El resultado si el producto existe
+/productos/editar/  → Editar al producto existente
+/productos/activos → Los productos que estan activos
+************************************************************
+ventas
+/ventas → lista todos los ventas existentes
+/ventas/NuevaVenta → Crea una nueva venta
+/clientes/BuscarVenta → Busca el id (código) de la venta
+/ventas/buscar → El resultado si la venta si existe
+/ventas/activos → Las ventas que estan activas
+***************************************************************
+detalles
+/detalles → lista todos los clientes existentes
+/detalles/NuevoDetalle → Crea un nuevo detalle de venta
+/detalles/BuscarDetalle → Busca el id (código) del detalle de la venta
+/detalles/buscar → El resultado el detalle de la venta es existente
+***********************************************************************
 
-## Instalación y Ejecución 
-1. Clonar repositorio https://github.com/Jambrocio-2025444/KinalApp-1.0.git
-2. Abrir Intellij IDEA.
-3. Abrir la carpeta que clono.
-4. Abrir MySQL en su ordenador.
-5. Ingresar a la instancia activa en MySQL.
-6. Regresar a Intellij IDEA.
-7. Dirigirse a la carpeta "\src\main\java\com\joseAmbrocio".
-11. Dirirgirse a KinalAppApplication y ejecutar la aplicación.
-12. Abrir la carpeta "resources/application.properties".
-13. Ingresar el nombre y contraseña de tu usuario en MySQL donde dice "spring.datasource.username, spring.datasource.password".
-12. Abrir el navegador y poner el puerto http://localhost:8081/clientes.
 
-## Endpoints 
-* Cliente: 
-1. "/clientes": Esto lista a todos los clientes que existen. 
-2. "/estado": Esto lista todos los clientes que están en estado activos.
-3. "/{dpi}": Esto busca el cliente por medio del id.
-4. "/{dpi}": Esto elimina el cliente medio del id.
-5. "/{dpi}": Esto actualiza el cliente medio del id.
+<img width="1918" height="936" alt="image" src="https://github.com/user-attachments/assets/1efc6fc7-f41a-4253-bed2-be99d78674b7" />
+<img width="1916" height="888" alt="image" src="https://github.com/user-attachments/assets/a67c313f-b109-4e7a-8646-7b93ee1a8769" />
+<img width="1918" height="938" alt="image" src="https://github.com/user-attachments/assets/5e75d0c6-902a-4417-bc2b-e4a4e4fb82c0" />
+<img width="1918" height="966" alt="image" src="https://github.com/user-attachments/assets/6b3795ea-96b1-4b10-990b-c792e03a7457" />
+<img width="1918" height="972" alt="image" src="https://github.com/user-attachments/assets/96f74e91-0649-4598-879e-5dcc653a9e78" />
 
-* Usuario:
-1. "/usuarios": Esto lista a todos los usuarios que existen.
-2. "/activo": Esto lista los usuarios que están en estado activo.
-3. "/{codigoUsuario}": Esto busca el usuario por medio del id.
-4. "/{codigoUsuario}": Esto elimina el usuario por medio del id.
-5. "/{codigoUsuario}": Esto actualiza el usuario por medio del id.
 
-* Productos:
-1. "/Productos": Esto lista todos productos que existen.
-2. "/activos": Esto lista los productos que están activos.
-3. "/{codigoProducto}": Esto busca el producto por medio del id.
-4. "/{codigoProducto}": Esto elimina el producto por medio del id.
-5. "/{codigoProducto}": Esto actualiza el producto por medio del id.
-6. "/listar-stock": Esto lista el nombre del producto y la cantidad que hay en stock.
 
-* Ventas:
-1. "/Ventas": Esto lista todas las ventas que existen.
-2. "/activos": Esto lista las ventas que están activos.
-3. "/{codigoVenta}": Esto busca la venta por medio del id.
-4. "/{codigoVenta}": Esto elimina la venta por medio del id.
-5. "/{codigoVenta}": Esto actualiza la venta por medio del id.
 
-* DetalleVenta:
-1. "/Detalle": Esto nos lista los detalles de venta que existe.
-2. "/{codigoDetalleVenta}": Esto busca los detalles de venta por medio él id.
-3. "/{codigoDetalleVenta}": Esto elimina los detalles de venta por medio él id.
