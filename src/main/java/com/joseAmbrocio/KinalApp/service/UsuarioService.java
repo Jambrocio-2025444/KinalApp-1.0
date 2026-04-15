@@ -91,4 +91,14 @@ public class UsuarioService implements IUsuarioService {
             throw new IllegalArgumentException("La contraseña es obligatorio");
         }
     }
+
+    @Override
+    public Optional<Usuarios> buscarPorUsername(String username) {
+        return usuarioRepository.findByUsername(username);
+    }
+
+    @Override
+    public boolean existePorUsername(String username) {
+        return usuarioRepository.findByUsername(username).isPresent();
+    }
 }
