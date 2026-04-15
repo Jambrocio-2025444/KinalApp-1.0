@@ -26,4 +26,8 @@ public interface IUsuarioService {
 
     //Metodo que dice si usuario esta activo o no
     List<Usuarios> activo();
+
+    Optional<Usuarios> buscarPorUsername(String username);
+
+    boolean existePorUsername(String username);
 }
