@@ -3,15 +3,11 @@ package com.joseAmbrocio.KinalApp.controller;
 
 import com.joseAmbrocio.KinalApp.entity.Usuarios;
 import com.joseAmbrocio.KinalApp.service.IUsuarioService;
-import com.joseAmbrocio.KinalApp.service.UsuarioService;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
-
-@RestController
+@Controller
 @RequestMapping("/usuarios")
 public class UsuarioController {
 
@@ -22,65 +18,92 @@ public class UsuarioController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Usuarios>>listar(){
-            List<Usuarios> usuarios = usuarioService.listarTodos();
-            return ResponseEntity.ok(usuarios);
+    public String ListarUsuarios(Model model) {
+        model.addAttribute("usuarios", usuarioService.listarTodos());
+        return "usuarios/listarUsuarios";
     }
 
 
-    @GetMapping("/{codigoUsuario}")
-    public ResponseEntity<Usuarios> buscarPorIdUsuario(@PathVariable int codigoUsuario){
-        return usuarioService.buscarPorId(codigoUsuario)
-                .map(ResponseEntity:: ok)
-
-                .orElse(ResponseEntity.notFound().build());
+    @GetMapping("/buscar")
+    public String buscarUsuario(@RequestParam("codigoUsuario") Long codigoUsuario, Model model) {
+        Usuarios usuarios = usuarioService.buscarPorId(codigoUsuario).orElse(null);
+        if(usuarios != null) {
+            model.addAttribute("usuarios", usuarios);
+            model.addAttribute("encontrado", true);
+        }else{
+            model.addAttribute("encontrado", false);
+            model.addAttribute("mensaje", "Usuario no encontrado " + codigoUsuario);
+        }
+        return "usuarios/buscar";
     }
 
     @GetMapping("/activos")
-    public ResponseEntity<List<Usuarios>> activos(){
-        List<Usuarios> usuarios = usuarioService.activo();
-        return ResponseEntity.ok(usuarios);
+    public String listarActivos(Model model){
+        model.addAttribute("usuarios", usuarioService.activo());
+        model.addAttribute("Titulo", "Activos");
+        return "usuarios/activos";
     }
 
 
-    @PostMapping
-    public ResponseEntity<?> guardar(@RequestBody Usuarios usuario){
+    @PostMapping("/guardar")
+    public String GuadarUsuario(@ModelAttribute ("usuarios") Usuarios usuarios, Model model){
         try{
-            Usuarios nuevoUsuario = usuarioService.guardar(usuario);
-            return new ResponseEntity<>(nuevoUsuario, HttpStatus.CREATED);
+            usuarioService.guardar(usuarios);
+            return "redirect:/usuarios";
         }catch (IllegalArgumentException e){
-            return ResponseEntity.badRequest().body(e.getMessage());
+            model.addAttribute("error", e.getMessage());
+            model.addAttribute("usuarios", usuarios);
+            model.addAttribute("titulo", "Agregar usuario");
         }
+        return "usuarios/NuevoUsuario";
     }
 
-    @DeleteMapping("/{codigoUsuario}")
-    public ResponseEntity<Void> eliminar(@PathVariable int codigoUsuario){
+    @GetMapping("/eliminar/{codigoUsuario}")
+    public String eliminar(@PathVariable Long codigoUsuario, Model model){
         try{
-            if (!usuarioService.existePorId(codigoUsuario)){
-                return ResponseEntity.notFound().build();
+            if(!usuarioService.existePorId(codigoUsuario)){
+                model.addAttribute("mensaje", "Usuario no encontrado " + codigoUsuario);
+                model.addAttribute("usuarios", usuarioService.listarTodos());
+                return "usuarios/listarUsuarios";
             }
             usuarioService.eliminar(codigoUsuario);
-            return ResponseEntity.notFound().build();
-        }catch (RuntimeException e){
-            return ResponseEntity.notFound().build();
+            return "redirect:/usuarios";
+        }catch (IllegalArgumentException e){
+            model.addAttribute("error", e.getMessage());
+            model.addAttribute("usuarios", usuarioService.listarTodos());
+            return "usuarios/listarUsuarios";
         }
     }
 
 
-    @PutMapping("/{codigoUsuario}")
-    public ResponseEntity<?> actualizar(@PathVariable int codigoUsuario, @RequestBody Usuarios usuarios){
-        try {
-            if (!usuarioService.existePorId(codigoUsuario)){
-                return ResponseEntity.notFound().build();
-            }
-            Usuarios UsuariosActualizado = usuarioService.actualizar(codigoUsuario, usuarios);
-            return ResponseEntity.ok(UsuariosActualizado);
-        }catch (IllegalArgumentException e){
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }catch (RuntimeException e){
-            return ResponseEntity.notFound().build();
-        }
+    @PostMapping("/actualizar/{codigoUsuario}")
+    public String actualizar(@PathVariable Long codigoUsuario, @ModelAttribute Usuarios usuarios){
+        usuarios.setCodigoUsuario(codigoUsuario);
+        usuarioService.actualizar(codigoUsuario, usuarios);
+        return "redirect:/usuarios";
+    }
 
+
+    //Formularios
+    @GetMapping("/NuevoUsuario")
+    public String NuevoUsuario(Model model){
+        model.addAttribute("usuarios", new Usuarios());
+        model.addAttribute("Titulo", "Nuevo Usuario");
+        return "usuarios/NuevoUsuario";
+    }
+
+    @GetMapping("/BuscarUsuario")
+    public String formularioBuscarUsuario(Model model){
+        model.addAttribute("usuarios", new Usuarios());
+        return "usuarios/BuscarUsuario";
+    }
+
+    @GetMapping("/editar/{codigoUsuario}")
+    public String formularioActualizarUsuario(@PathVariable Long codigoUsuario, Model model){
+        Usuarios usuarios = usuarioService.buscarPorId(codigoUsuario)
+                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+        model.addAttribute("usuarios", usuarios);
+        return "usuarios/ActualizarUsuario";
     }
 
 }
