@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{fragments/menu :: main}">
+
+<th:block th:fragment="content">
+    <div class="page-header">
+        <h2><i class="bi bi-cart-check"></i> Lista de Ventas</h2>
+        <div class="button-group">
+            <a href="/ventas/NuevaVenta" class="btn btn-primary">
+                <i class="bi bi-plus-lg"></i> Nueva Venta
+            </a>
+            <a href="/ventas/BuscarVenta" class="btn btn-outline-custom">
+                <i class="bi bi-search"></i> Buscar Venta
+            </a>
+            <a href="/ventas/activos" class="btn btn-outline-success">
+                <i class="bi bi-check-circle"></i> Ventas Activas
+            </a>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-body">
+            <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
+
+            <div th:if="${venta != null and !venta.empty}">
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th>Código</th>
+                            <th>Cliente</th>
+                            <th>Usuario</th>
+                            <th>Fecha</th>
+                            <th>Total</th>
+                            <th>Estado</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="item : ${venta}">
+                            <td th:text="${item.codigoVenta}">Código</td>
+                            <td th:text="${item.cliente.nombreCliente}">Cliente</td>
+                            <td th:text="${item.usuario.username}">Usuario</td>
+                            <td th:text="${item.fechaVenta}">Fecha</td>
+                            <td th:text="${item.total}">Total</td>
+                            <td>
+                                <span th:if="${item.estado == 1}" class="badge bg-success">Activo</span>
+                                <span th:unless="${item.estado == 1}" class="badge bg-danger">Inactivo</span>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div th:if="${venta == null or venta.empty}" class="alert alert-info">
+                <i class="bi bi-info-circle"></i> No hay ventas registradas.
+            </div>
+        </div>
+    </div>
+</th:block>
+
+</html>

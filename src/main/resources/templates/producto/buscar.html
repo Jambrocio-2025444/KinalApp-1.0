@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{fragments/menu :: main}">
+
+<th:block th:fragment="content">
+    <div class="page-header">
+        <h2><i class="bi bi-search"></i> Resultado de Búsqueda</h2>
+        <div>
+            <a href="/productos" class="btn btn-secondary">
+                <i class="bi bi-arrow-left"></i> Volver
+            </a>
+            <a href="/productos/BuscarProducto" class="btn btn-primary">
+                <i class="bi bi-search"></i> Nueva Búsqueda
+            </a>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-body">
+            <div th:if="${encontrado == true}">
+                <h3 class="text-success mb-3">
+                    <i class="bi bi-check-circle-fill"></i> Producto encontrado:
+                </h3>
+                <div class="table-responsive">
+                    <table class="table">
+                        <tbody>
+                        <tr>
+                            <th width="150">Código:</th>
+                            <td th:text="${producto.codigoProducto}">—</td>
+                        </tr>
+                        <tr>
+                            <th>Nombre:</th>
+                            <td th:text="${producto.nombreProducto}">—</td>
+                        </tr>
+                        <tr>
+                            <th>Precio:</th>
+                            <td th:text="${producto.precio}">—</td>
+                        </tr>
+                        <tr>
+                            <th>Stock:</th>
+                            <td th:text="${producto.stock}">—</td>
+                        </tr>
+                        <tr>
+                            <th>Estado:</th>
+                            <td>
+                                <span th:if="${producto.estado == 1}" class="badge bg-success">Activo</span>
+                                <span th:unless="${producto.estado == 1}" class="badge bg-danger">Inactivo</span>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="form-actions">
+                    <a th:href="@{/productos/editar/{codigoProducto}(codigoProducto=${producto.codigoProducto})}"
+                       class="btn btn-warning">
+                        <i class="bi bi-pencil"></i> Editar
+                    </a>
+                    <a th:href="@{/productos/eliminar/{codigoProducto}(codigoProducto=${producto.codigoProducto})}"
+                       class="btn btn-danger"
+                       onclick="return confirm('¿Eliminar este producto?')">
+                        <i class="bi bi-trash"></i> Eliminar
+                    </a>
+                </div>
+            </div>
+
+            <div th:if="${encontrado == false}" class="alert alert-danger">
+                <i class="bi bi-exclamation-triangle-fill"></i>
+                <span th:text="${mensaje}"></span>
+            </div>
+        </div>
+    </div>
+</th:block>
+
+</html>

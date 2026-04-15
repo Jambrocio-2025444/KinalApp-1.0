@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{fragments/menu :: main}">
+
+<th:block th:fragment="content">
+  <div class="page-header">
+    <h2><i class="bi bi-check-circle"></i> Ventas Activas</h2>
+    <a href="/ventas" class="btn btn-secondary">
+      <i class="bi bi-arrow-left"></i> Todas las ventas
+    </a>
+  </div>
+
+  <div class="card">
+    <div class="card-body">
+      <div class="table-responsive">
+        <table class="table">
+          <thead>
+          <tr>
+            <th>Código</th>
+            <th>Cliente</th>
+            <th>Usuario</th>
+            <th>Fecha</th>
+            <th>Total</th>
+            <th>Estado</th>
+            <th>Acciones</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr th:each="item : ${venta}">
+            <td th:text="${item.codigoVenta}">Código</td>
+            <td th:text="${item.cliente.nombreCliente}">Cliente</td>
+            <td th:text="${item.usuario.username}">Usuario</td>
+            <td th:text="${item.fechaVenta}">Fecha</td>
+            <td th:text="${item.total}">Total</td>
+            <td><span class="badge bg-success">Activo</span></td>
+            <td class="acciones">
+              <a th:href="@{/ventas/editar/{codigoVenta}(codigoVenta=${item.codigoVenta})}"
+                 class="btn btn-outline-warning btn-sm">
+                <i class="bi bi-pencil"></i> Editar
+              </a>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</th:block>
+
+</html>

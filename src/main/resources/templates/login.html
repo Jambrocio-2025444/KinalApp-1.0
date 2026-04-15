@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>KinalApp | Login</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    /* Variables para fácil mantenimiento */
+    :root {
+      --primary-orange: #F27420;
+      --deep-blue: #0B2D3F;
+      --accent-cyan: #009B97;
+      --dark-bg: #05161f;
+    }
+
+    body {
+      background-color: var(--dark-bg);
+      background-image: radial-gradient(circle at 20% 30%, #0b2d3f 0%, #05161f 100%);
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    .card {
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 15px;
+      color: white;
+    }
+
+    .card-header {
+      background: transparent !important;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 2rem 1rem;
+    }
+
+    .logo-img {
+      width: 80px;
+      height: 80px;
+      object-fit: contain;
+      filter: drop-shadow(0 0 10px rgba(242, 116, 32, 0.3));
+      margin-bottom: 15px;
+    }
+
+    .form-label {
+      color: rgba(255, 255, 255, 0.8);
+      font-size: 0.9rem;
+    }
+
+    .form-control {
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: white;
+      border-radius: 8px;
+    }
+
+    .form-control:focus {
+      background: rgba(255, 255, 255, 0.15);
+      border-color: var(--accent-cyan);
+      box-shadow: 0 0 0 0.25rem rgba(0, 155, 151, 0.25);
+      color: white;
+    }
+
+    .btn-primary {
+      background-color: var(--primary-orange);
+      border: none;
+      padding: 10px;
+      font-weight: 600;
+      transition: all 0.3s ease;
+    }
+
+    .btn-primary:hover {
+      background-color: #d6631a;
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(242, 116, 32, 0.4);
+    }
+
+    .app-title {
+      font-weight: 700;
+      letter-spacing: 1px;
+      color: white;
+    }
+
+    .login-subtitle {
+      color: var(--accent-cyan);
+      text-transform: uppercase;
+      font-size: 0.75rem;
+      letter-spacing: 2px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <div class="row justify-content-center">
+    <div class="col-md-4 col-sm-8">
+      <div class="card shadow-lg">
+        <div class="card-header text-center">
+          <img th:src="@{/images/logo.png}" alt="Logo" class="logo-img">
+          <h3 class="app-title mb-0">KinalApp</h3>
+          <span class="login-subtitle">Portal de Acceso</span>
+        </div>
+        <div class="card-body p-4">
+          <div th:if="${error}" class="alert alert-danger py-2" style="font-size: 0.85rem;" th:text="${error}"></div>
+
+          <form action="/login" method="post">
+            <div class="mb-3">
+              <label class="form-label">Usuario</label>
+              <input type="text" name="username" class="form-control" placeholder="Ej. jambrocio" required>
+            </div>
+            <div class="mb-4">
+              <label class="form-label">Contraseña</label>
+              <input type="password" name="password" class="form-control" placeholder="••••••••" required>
+            </div>
+            <button type="submit" class="btn btn-primary w-100 mb-3">INGRESAR</button>
+            <div class="text-center mt-3">
+              <a href="/registro">¿No tienes cuenta? Regístrate aquí</a>
+            </div>
+          </form>
+        </div>
+      </div>
+      <p class="text-center mt-4" style="color: rgba(255,255,255,0.4); font-size: 0.8rem;">
+        &copy; 2026 KinalApp - Todos los derechos reservados.
+      </p>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

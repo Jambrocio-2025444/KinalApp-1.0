@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{fragments/menu :: main}">
+
+<th:block th:fragment="content">
+    <div class="page-header">
+        <h2><i class="bi bi-people"></i> Lista de Clientes</h2>
+        <div class="button-group">
+            <a href="/clientes/NuevoCliente" class="btn btn-primary">
+                <i class="bi bi-plus-lg"></i> Nuevo Cliente
+            </a>
+            <a href="/clientes/BuscarCliente" class="btn btn-outline-custom">
+                <i class="bi bi-search"></i> Buscar Cliente
+            </a>
+            <a href="/clientes/activos" class="btn btn-outline-success">
+                <i class="bi bi-check-circle"></i> Clientes Activos
+            </a>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-body">
+            <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
+
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>DPI</th>
+                        <th>Nombre</th>
+                        <th>Apellido</th>
+                        <th>Dirección</th>
+                        <th>Estado</th>
+                        <th>Acciones</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="cliente : ${clientes}">
+                        <td th:text="${cliente.DPICliente}">DPI</td>
+                        <td th:text="${cliente.nombreCliente}">Nombre</td>
+                        <td th:text="${cliente.apellidoCliente}">Apellido</td>
+                        <td th:text="${cliente.direccion}">Dirección</td>
+                        <td>
+                            <span th:if="${cliente.estado == 1}" class="badge bg-success">Activo</span>
+                            <span th:unless="${cliente.estado == 1}" class="badge bg-danger">Inactivo</span>
+                        </td>
+                        <td class="acciones">
+                            <a th:href="@{/clientes/editar/{dpi}(dpi=${cliente.DPICliente})}"
+                               class="btn btn-outline-warning btn-sm">
+                                <i class="bi bi-pencil"></i> Editar
+                            </a>
+                            <a th:href="@{/clientes/eliminar/{dpi}(dpi=${cliente.DPICliente})}"
+                               class="btn btn-outline-danger btn-sm"
+                               onclick="return confirm('¿Eliminar este cliente?')">
+                                <i class="bi bi-trash"></i> Eliminar
+                            </a>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</th:block>
+
+</html>

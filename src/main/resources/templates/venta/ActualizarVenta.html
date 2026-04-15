@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{fragments/menu :: main}">
+
+<th:block th:fragment="content">
+  <div class="page-header">
+    <h2><i class="bi bi-pencil-square"></i> Editar Venta</h2>
+    <a href="/ventas" class="btn btn-secondary">
+      <i class="bi bi-arrow-left"></i> Volver
+    </a>
+  </div>
+
+  <div class="card">
+    <div class="card-body">
+      <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
+
+      <form th:action="@{/ventas/actualizar/{codigoVenta}(codigoVenta=${venta.codigoVenta})}"
+            method="post"
+            th:object="${venta}">
+
+        <div class="form-group">
+          <label>Código:</label>
+          <input type="text" th:value="*{codigoVenta}" class="form-control" readonly disabled>
+          <input type="hidden" name="codigoVenta" th:value="*{codigoVenta}">
+        </div>
+
+        <div class="form-group">
+          <label>Cliente:</label>
+          <select name="cliente.DPICliente" class="form-control" required>
+            <option value="">-- Seleccione Cliente --</option>
+            <option th:each="cli : ${cliente}"
+                    th:value="${cli.DPICliente}"
+                    th:text="${cli.nombreCliente}"
+                    th:selected="${cli.DPICliente == venta.cliente.DPICliente}"></option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Usuario:</label>
+          <select name="usuario.codigoUsuario" class="form-control" required>
+            <option value="">-- Seleccione Usuario --</option>
+            <option th:each="user : ${usuario}"
+                    th:value="${user.codigoUsuario}"
+                    th:text="${user.username}"
+                    th:selected="${user.codigoUsuario == venta.usuario.codigoUsuario}"></option>
+          </select>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Fecha Venta:</label>
+            <input type="date" name="fechaVenta" th:value="*{fechaVenta}" class="form-control" required>
+          </div>
+
+          <div class="form-group">
+            <label>Total:</label>
+            <input type="number" step="0.01" name="total" th:value="*{total}" class="form-control" required>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Estado:</label>
+          <select name="estado" class="form-control">
+            <option value="1" th:selected="*{estado == 1}"> Activo</option>
+            <option value="0" th:selected="*{estado == 0}"> Inactivo</option>
+          </select>
+        </div>
+
+        <div class="form-actions">
+          <button type="submit" class="btn btn-primary">
+            <i class="bi bi-save"></i> Actualizar
+          </button>
+          <a href="/ventas" class="btn btn-secondary">
+            <i class="bi bi-x-circle"></i> Cancelar
+          </a>
+        </div>
+      </form>
+    </div>
+  </div>
+</th:block>
+
+</html>
