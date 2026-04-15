@@ -2,77 +2,113 @@ package com.joseAmbrocio.KinalApp.controller;
 
 
 import com.joseAmbrocio.KinalApp.entity.Ventas;
+import com.joseAmbrocio.KinalApp.service.IClienteService;
+import com.joseAmbrocio.KinalApp.service.IUsuarioService;
 import com.joseAmbrocio.KinalApp.service.IVentasService;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 
-@RestController
-@RequestMapping("/Ventas")
+@Controller
+@RequestMapping("/ventas")
 public class VentasController {
 
     private IVentasService ventasService;
-    public VentasController(IVentasService ventasService) {
+    private IUsuarioService usuarioService;
+    private IClienteService clienteService;
+
+    public VentasController(IUsuarioService usuarioService, IVentasService ventasService, IClienteService clienteService) {
+        this.usuarioService = usuarioService;
         this.ventasService = ventasService;
+        this.clienteService = clienteService;
     }
 
     @GetMapping
-    ResponseEntity<List<Ventas>> listar() {
-        List<Ventas> ventas = ventasService.listarTodos();
-        return ResponseEntity.ok(ventas);
+    public String listarVentas(Model model){
+        model.addAttribute("venta", ventasService.listarTodos());
+        return "venta/listarVentas";
     }
 
-    @GetMapping("/{codigoVenta}")
-    public ResponseEntity<Ventas> buscarVenta(@PathVariable int codigoVenta) {
-        return ventasService.buscarVenta(codigoVenta)
-                .map(ResponseEntity::ok)
-
-                .orElse(ResponseEntity.notFound().build());
+    @GetMapping("/buscar")
+    public String buscarVenta (@RequestParam ("codigoVenta") Long codigoVenta,  Model model) {
+        Ventas venta = ventasService.buscarVenta(codigoVenta).orElse(null);
+        if (venta != null) {
+            model.addAttribute("venta", venta);
+            model.addAttribute("encontrado", true);
+        }else{
+            model.addAttribute("encontrado", false);
+            model.addAttribute("mensaje", "No se encontro la venta " + codigoVenta);
+        }
+        return "venta/buscar";
     }
 
     @GetMapping("/activos")
-    public ResponseEntity<List<Ventas>> activos() {
-        List<Ventas> ventas = ventasService.activos();
-        return ResponseEntity.ok(ventas);
+    public String listarActivos(Model model){
+        model.addAttribute("venta", ventasService.listarTodos());
+        model.addAttribute("Titulo", "Activos");
+        return "venta/activos";
     }
 
-    @PostMapping
-    public ResponseEntity<?> guardarVenta(@RequestBody Ventas ventas) {
+    @PostMapping("/guardar")
+    public String guardarVenta(@ModelAttribute ("venta") Ventas venta, Model model){
         try {
-            Ventas nuevaVenta = ventasService.guardarVenta(ventas);
-            return new ResponseEntity<>(nuevaVenta, HttpStatus.CREATED);
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
+
+            ventasService.guardarVenta(venta);
+            return "redirect:/ventas";
+        }catch (IllegalArgumentException e){
+            model.addAttribute("error", e.getMessage());
+            model.addAttribute("venta", venta);
+            model.addAttribute("cliente", clienteService.listarTodos());
+            model.addAttribute("usuario", usuarioService.listarTodos());
+            model.addAttribute("Titulo", "Agregar Venta");
         }
+        return "venta/NuevaVenta";
     }
 
-    @PutMapping("/{codigoVenta}")
-    public ResponseEntity<?> actualizarVenta(@PathVariable int codigoVenta, @RequestBody Ventas ventas) {
+    @PostMapping("/actualizar/{codigoVenta}")
+    public String ActualizarVenta(@PathVariable Long codigoVenta, @ModelAttribute Ventas venta, Model model){
         try {
-            if (!ventasService.existeVenta(codigoVenta)) {
-                return ResponseEntity.notFound().build();
-            }
-            Ventas ventaActualizada = ventasService.actualizarVenta(codigoVenta, ventas);
-            return ResponseEntity.ok(ventaActualizada);
-        }catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }catch (RuntimeException e) {
-            return ResponseEntity.notFound().build();
+            venta.setCodigoVenta(codigoVenta);
+            ventasService.actualizarVenta(codigoVenta, venta);
+            return "redirect:/ventas";
+        }catch (IllegalArgumentException e){
+             model.addAttribute("error", e.getMessage());
+             model.addAttribute("venta", venta);
+             model.addAttribute("cliente", clienteService.listarTodos());
+             model.addAttribute("usuario", usuarioService.listarTodos());
+             return "venta/actualizarVenta";
         }
     }
 
-    @DeleteMapping("/{codigoVenta}")
-    public ResponseEntity<Void> eliminarVenta(@PathVariable int codigoVenta){
-        try{
-            if(!ventasService.existeVenta(codigoVenta)){
-                return ResponseEntity.notFound().build();
-            }
-            ventasService.eliminarVenta(codigoVenta);
-            return ResponseEntity.noContent().build();
-        }catch (RuntimeException e) {
-            return ResponseEntity.notFound().build();
-        }
+
+    //Formularios
+    @GetMapping("/NuevaVenta")
+    public String NuevaVenta(Model model){
+        model.addAttribute("venta", new Ventas());
+        model.addAttribute("cliente",  clienteService.listarTodos());
+        model.addAttribute("usuario", usuarioService.listarTodos());
+        model.addAttribute("Titulo", "Agregar Venta");
+        return "venta/NuevaVenta";
     }
+
+    @GetMapping("/BuscarVenta")
+    public String formularioBuscarVenta(Model model){
+        model.addAttribute("venta", new Ventas());
+        return "venta/BuscarVenta";
+    }
+
+    /*
+    @GetMapping("/editar/{codigoVenta}")
+    public String formularioActualizarVenta(@PathVariable Long codigoVenta, Model model){
+        Ventas venta = ventasService.buscarVenta(codigoVenta)
+                .orElseThrow(() -> new RuntimeException("Venta no encontrada"));
+        model.addAttribute("venta", venta);
+        model.addAttribute("cliente", clienteService.listarTodos());
+        model.addAttribute("usuario", usuarioService.listarTodos());
+        model.addAttribute("Titulo", "Editar Venta");
+        return "venta/ActualizarVenta";
+    }
+     */
+
 }
