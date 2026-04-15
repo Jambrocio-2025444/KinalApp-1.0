@@ -4,68 +4,76 @@ package com.joseAmbrocio.KinalApp.controller;
 import com.joseAmbrocio.KinalApp.entity.DetalleVentas;
 import com.joseAmbrocio.KinalApp.entity.Ventas;
 import com.joseAmbrocio.KinalApp.service.IDetallesVenta;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import com.joseAmbrocio.KinalApp.service.IProductoService;
+import com.joseAmbrocio.KinalApp.service.IVentasService;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
-@RestController
-@RequestMapping("/Detalle")
+@Controller
+@RequestMapping("/detalles")
 public class DetalleVentaController {
 
+    private IProductoService productoService;
+    private IVentasService ventasService;
     private IDetallesVenta detallesVentaService;
-    public DetalleVentaController(IDetallesVenta detallesVentaService) {
+
+    public DetalleVentaController(IProductoService productoService, IVentasService ventasService, IDetallesVenta detallesVentaService) {
+        this.productoService = productoService;
+        this.ventasService = ventasService;
         this.detallesVentaService = detallesVentaService;
     }
 
     @GetMapping
-    ResponseEntity<List<DetalleVentas>> listar() {
-        List<DetalleVentas> Detalleventas = detallesVentaService.listarTodos();
-        return ResponseEntity.ok(Detalleventas);
+    public String listarDetalles(Model model){
+        model.addAttribute("detalle", detallesVentaService.listarTodos());
+        return "detalle/listarDetalle";
     }
 
-    @GetMapping("/{codigoDetalleVenta}")
-    public ResponseEntity<DetalleVentas> buscarDetalleVentas(@PathVariable long codigoDetalleVenta) {
-        return detallesVentaService.buscarDetalleVentas(codigoDetalleVenta)
-                .map(ResponseEntity::ok)
-
-                .orElse(ResponseEntity.notFound().build());
+    @GetMapping("/buscar")
+    public String buscarDetalle(@RequestParam ("codigoDetalleVenta") Long codigoDetalleVenta, Model model){
+        DetalleVentas detalle = detallesVentaService.buscarDetalleVentas(codigoDetalleVenta).orElse(null);
+        if(detalle != null){
+            model.addAttribute("detalle", detalle);
+            model.addAttribute("encontrado", true);
+        }else{
+            model.addAttribute("encontrado", false);
+            model.addAttribute("mensaje", "Detalle de venta no encontrado " + codigoDetalleVenta );
+        }
+        return "detalle/buscar";
     }
 
-    @PostMapping
-    public ResponseEntity<?> guardarDetalleVentas(@RequestBody DetalleVentas detalleVentas) {
-        try {
-            DetalleVentas detalleVentasNueva = detallesVentaService.guardarDetalleVentas(detalleVentas);
-            return new ResponseEntity<>(detalleVentasNueva, HttpStatus.CREATED);
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
+    @PostMapping("/guardar")
+    public String GuardarDetalle(@ModelAttribute DetalleVentas detalle, Model model){
+        try{
+            detallesVentaService.guardarDetalleVentas(detalle);
+            return "redirect:/detalles";
+        }catch (IllegalArgumentException e){
+            model.addAttribute("error", e.getMessage());
+            model.addAttribute("detalle", detalle);
+            model.addAttribute("producto", productoService.listarTodos());
+            model.addAttribute("venta", ventasService.listarTodos());
+            model.addAttribute("Titulo", "Agregar Detalle Venta");
+            return "detalle/NuevoDetalle";
         }
     }
 
-    @PutMapping("/{codigoDetalleVenta}")
-    public ResponseEntity<?> actualizarDetalleVentas(@PathVariable long codigoDetalleVenta, @RequestBody DetalleVentas detalleVentas) {
-        try {
-            if (!detallesVentaService.ExisteDetalleVentas(codigoDetalleVenta)) {
-                return ResponseEntity.notFound().build();
-            }
-            DetalleVentas DetalleVentasActualizada = detallesVentaService.actualizarDetalleVentas(codigoDetalleVenta, detalleVentas);
-            return ResponseEntity.ok(DetalleVentasActualizada);
-        }catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }catch (RuntimeException e) {
-            return ResponseEntity.notFound().build();
-        }
+
+
+
+    @GetMapping("/NuevoDetalle")
+    public String NuevoDetalle(Model model){
+        model.addAttribute("detalle", new DetalleVentas());
+        model.addAttribute("venta", ventasService.listarTodos());
+        model.addAttribute("producto", productoService.listarTodos());
+        model.addAttribute("Titulo", "Agregar detalle venta");
+        return "detalle/NuevoDetalle";
     }
 
-    @DeleteMapping("/{codigoDetalleVenta}")
-    public ResponseEntity<?> eliminar(@PathVariable Long codigoDetalleVenta) {
-        try {
-            detallesVentaService.EliminarDetalleVentas(codigoDetalleVenta);
-            return ResponseEntity.noContent().build();
-        } catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-        }
+    @GetMapping("/BuscarDetalle")
+    public String formularioBuscarDetalle(Model model){
+        model.addAttribute("detalle", new DetalleVentas());
+        return "detalle/BuscarDetalle";
     }
 }
 
