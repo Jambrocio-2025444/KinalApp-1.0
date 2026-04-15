@@ -3,13 +3,13 @@ package com.joseAmbrocio.KinalApp.controller;
 
 import com.joseAmbrocio.KinalApp.entity.Cliente;
 import com.joseAmbrocio.KinalApp.service.IClienteService;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RestController
+@Controller
 //@RestController = @controller + @ResponseBody
 @RequestMapping("/clientes")
 //Todas las rutas en este controlador deben empezar con /clientes
@@ -26,92 +26,98 @@ public class ClienteController {
 
     //Responde a peticiones GET
     @GetMapping
-    //ResponseEntity nos permite controlar el codigo HTTP y el cuerpo
-    public ResponseEntity<List<Cliente>> listar(){
-        List<Cliente> clientes = clienteService.listarTodos();
-        //Delegamos el servicio
-        return ResponseEntity.ok(clientes);
-        //200 OK con la lista de clientes
+    public String listarClientes(Model model){
+       model.addAttribute("clientes", clienteService.listarTodos());
+       return "clientes/listar";
     }
 
     //{dpi} es una variable de ruta (valor a buscar)
-    @GetMapping("/{dpi}")
-    public ResponseEntity<Cliente> buscarPorDPI(@PathVariable String dpi){
-        //@PathVariable toma el valor de la URL y lo asigna al DPI
-        return clienteService.buscarPorDPI(dpi)
-                .map(ResponseEntity:: ok)
-
-                .orElse(ResponseEntity.notFound().build());
+    @GetMapping("/buscar")
+    public String buscarPorDpi(@RequestParam String dpi, Model model){
+        Cliente cliente = clienteService.buscarPorDPI(dpi).orElse(null);
+        if(cliente != null) {
+            model.addAttribute("cliente", cliente);
+            model.addAttribute("encontrado", true);
+        }else{
+            model.addAttribute("encontrado", false);
+            model.addAttribute("mensaje", "No se encontró al cliente: " + dpi);
+        }
+        return "clientes/buscar";
     }
 
     @GetMapping("/activos")
-    public ResponseEntity<List<Cliente>> activo(){
-        List<Cliente> clientes = clienteService.activo();
-        return ResponseEntity.ok(clientes);
+    public String listarActivos(Model model){
+        model.addAttribute("clientes", clienteService.activo());
+        model.addAttribute("titulo", "Clientes Activos");
+        return "clientes/activos";
     }
 
     //POST crea un nuevo cliente
-    @PostMapping
-    public ResponseEntity<?> guardar(@RequestBody Cliente cliente){
-        //@RequestBody: Toma el JSON del cuerpo y lo convierte a un objeto de tipo cliente
-        //<?> significa "tipo generico" puede ser un cliente o un strig
+    @PostMapping("/guardar")
+    public String guardarCliente(@ModelAttribute("cliente") Cliente cliente, Model model){
         try{
-            Cliente nuevoCliente = clienteService.guardar(cliente);
-            //Intentamos guardar el cliente pero puede lanzar una excepcion
-            //de IllegalArgumentException
-            return new ResponseEntity<>(nuevoCliente, HttpStatus.CREATED);
-            //201 CREATED(mucho más especifico que el 2200 para la creacion de un cliente)
+            clienteService.guardar(cliente);
+            return "redirect:/clientes";
         }catch (IllegalArgumentException e){
-            //Si hay error de validacion
-            return ResponseEntity.badRequest().body(e.getMessage());
-            //400 BAD REQUEST con el mensaje de error
+            model.addAttribute("error", e.getMessage());
+            model.addAttribute("cliente", cliente);
+            model.addAttribute("titulo", "Agregar cliente");
+            return "clientes/NuevoCliente";
         }
     }
 
 
-    @DeleteMapping("/{dpi}")
-    public ResponseEntity<Void> eliminar(@PathVariable String dpi){
-        //ResponseEntity<Void>: No devuyelve el cuerpo de la respuesta
+    @GetMapping("/eliminar/{dpi}")
+    public String eliminarCliente(@PathVariable String dpi, Model model){
         try{
-            if (!clienteService.existePorDPI(dpi)){
-                return ResponseEntity.notFound().build();
-                //404 si no existe
+            if(!clienteService.existePorDPI(dpi)){
+                model.addAttribute("error", "Cliente no encontrado " + dpi);
+                model.addAttribute("clientes", clienteService.listarTodos());
+                return "clientes/listar";
+
             }
             clienteService.eliminar(dpi);
-            return ResponseEntity.notFound().build();
-        }catch (RuntimeException e){
-            return ResponseEntity.notFound().build();
-            //404 NOT FOUND
-        }
-    }
-
-    //Actualizar cliente através de DPI
-    @PutMapping("/{dpi}")
-    public ResponseEntity<?> actualizar(@PathVariable String dpi, @RequestBody Cliente cliente){
-        try {
-            if (!clienteService.existePorDPI(dpi)){
-                //Verificar si existe antes de poder actualizar
-                //404 NOT FOUND
-                return ResponseEntity.notFound().build();
-            }
-            //Actualizar el cliente pero esto puede lanzar una excepción
-            Cliente clienteActualizado = clienteService.actualizar(dpi, cliente);
-            return ResponseEntity.ok(clienteActualizado);
-            //200 ok con el cliente ya actualizado
+            return "redirect:/clientes";
         }catch (IllegalArgumentException e){
-            //Error cuando los datos son incorrectos
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }catch (RuntimeException e){
-            //Posiblemente cualquier otro error como: cliente no encontrado, etc
-            //404   NOT FOUND
-            return ResponseEntity.notFound().build();
+            model.addAttribute("error", "Error al elimninar un cliente " + e.getMessage());
+            model.addAttribute("clientes", clienteService.listarTodos());
+            return "clientes/listar";
         }
 
+    }
+
+    //Actualizar cliente
+    @PostMapping("/actualizar/{dpi}")
+    public String actualizar(@PathVariable String dpi, @ModelAttribute Cliente cliente) {
+        cliente.setDPICliente(dpi);
+        clienteService.actualizar(dpi, cliente);
+        return "redirect:/clientes";
     }
 
 
 
 
+    //Formularios
+    @GetMapping("/NuevoCliente")
+    public String formularioNuevoCliente(Model model){
+        model.addAttribute("cliente", new Cliente());
+        model.addAttribute("Agregar", "Nuevo Cliente");
+        return "clientes/NuevoCliente";
+    }
+
+    @GetMapping("/BuscarCliente")
+    public String formularioBuscarCliente(Model model){
+        model.addAttribute("cliente", new Cliente());
+        return "clientes/BuscarCliente";
+    }
+
+    @GetMapping("/editar/{dpi}")
+    public String formularioActualizarCliente(@PathVariable String dpi, Model model){
+        Cliente cliente = clienteService.buscarPorDPI(dpi)
+                .orElseThrow(() -> new RuntimeException("Cliente no encontrado"));
+        model.addAttribute("cliente", cliente);
+        return "clientes/ActualizarCliente";
+    }
 
 }
 
