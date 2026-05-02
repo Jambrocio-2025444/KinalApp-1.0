@@ -95,9 +95,10 @@ detalles
 ***********************************************************************
 Seguridad
  /login → Página de inicio de sesión
-/registro` → Registro de nuevos usuarios
+/registro → Registro de nuevos usuarios
 /acceso-denegado → Página de acceso denegado (403)
 /logout → Cierre de sesión
+***********************************************************************
 
 
 
@@ -106,6 +107,16 @@ Seguridad
 <img width="1918" height="938" alt="image" src="https://github.com/user-attachments/assets/5e75d0c6-902a-4417-bc2b-e4a4e4fb82c0" />
 <img width="1918" height="966" alt="image" src="https://github.com/user-attachments/assets/6b3795ea-96b1-4b10-990b-c792e03a7457" />
 <img width="1918" height="972" alt="image" src="https://github.com/user-attachments/assets/96f74e91-0649-4598-879e-5dcc653a9e78" />
+***********************************************************************
+<img width="1918" height="945" alt="image" src="https://github.com/user-attachments/assets/17c29b32-94f7-46b5-b633-c912dc54eff8" />
+<img width="1918" height="1032" alt="image" src="https://github.com/user-attachments/assets/e694bebc-85f8-4512-8580-60689cdc1e02" />
+<img width="1918" height="1032" alt="image" src="https://github.com/user-attachments/assets/f72e6058-cf9c-4d27-aea2-62a8d6306610" />
+<img width="1913" height="1036" alt="image" src="https://github.com/user-attachments/assets/a0df7623-7b06-4886-88ee-c909a3c1f8cf" />
+
+
+
+
+
 
 
 
