@@ -29,5 +29,7 @@ public interface IUsuarioService {
 
     Optional<Usuarios> buscarPorUsername(String username);
 
+    Usuarios NuevoUsuario(String username, String password, String email);
+
     boolean existePorUsername(String username);
 }
