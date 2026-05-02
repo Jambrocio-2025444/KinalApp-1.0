@@ -19,7 +19,8 @@
           <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
           <div th:if="${mensaje}" class="alert alert-success" th:text="${mensaje}"></div>
 
-          <form action="/registro" method="post" th:object="${usuario}">
+          <!-- ✅ Sin th:object -->
+          <form action="/registro" method="post">
             <div class="mb-3">
               <label>Usuario</label>
               <input type="text" name="username" class="form-control" required autofocus>

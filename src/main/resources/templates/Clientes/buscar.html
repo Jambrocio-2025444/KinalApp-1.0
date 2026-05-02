@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
       th:replace="~{fragments/menu :: main}">
 
 <th:block th:fragment="content">
@@ -47,6 +48,7 @@
                     </table>
                 </div>
                 <div class="form-actions">
+                    <div sec:authorize="hasRole('ADMIN')">
                     <a th:href="@{/clientes/editar/{dpi}(dpi=${cliente.DPICliente})}" class="btn btn-warning">
                         <i class="bi bi-pencil"></i> Editar
                     </a>
@@ -55,6 +57,10 @@
                        onclick="return confirm('¿Eliminar este cliente?')">
                         <i class="bi bi-trash"></i> Eliminar
                     </a>
+                    </div>
+                    <div sec:authorize="!hasRole('ADMIN')">
+                        <span class="text-muted">Sin permisos</span>
+                    </div>
                 </div>
             </div>
 
