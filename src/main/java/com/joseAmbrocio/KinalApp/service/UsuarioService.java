@@ -2,8 +2,15 @@ package com.joseAmbrocio.KinalApp.service;
 
 import com.joseAmbrocio.KinalApp.entity.Usuarios;
 import com.joseAmbrocio.KinalApp.repository.UsuarioRepository;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 
 import java.util.List;
 import java.util.Optional;
@@ -17,10 +24,13 @@ import java.util.Optional;
 public class UsuarioService implements IUsuarioService {
 
     private final UsuarioRepository usuarioRepository;
+    private final PasswordEncoder passwordEncoder;
 
     //Inyeccion de dependencias
     public UsuarioService(UsuarioRepository usuarioRepository) {
         this.usuarioRepository = usuarioRepository;
+        this.passwordEncoder = new BCryptPasswordEncoder();
+
     }
 
     //@Override: sirve para indicar que estamos implementando un metodo de la interfaz
@@ -52,10 +62,22 @@ public class UsuarioService implements IUsuarioService {
         if (!usuarioRepository.existsById(codigoUsuario)){
             throw new RuntimeException("Usuario no encontrado " + codigoUsuario);
         }
-        usuario.setCodigoUsuario(codigoUsuario);
-        validarUsuario(usuario);
 
-        return usuarioRepository.save(usuario);
+        Usuarios usuarioExistente = usuarioRepository.findById(codigoUsuario).get();
+
+
+        usuarioExistente.setUsername(usuario.getUsername());
+        usuarioExistente.setEmail(usuario.getEmail());
+        usuarioExistente.setRol(usuario.getRol());
+        usuarioExistente.setEstado(usuario.getEstado());
+
+
+        if (usuario.getPassword() != null && !usuario.getPassword().trim().isEmpty()) {
+            usuarioExistente.setPassword(passwordEncoder.encode(usuario.getPassword()));
+        }
+
+
+        return usuarioRepository.save(usuarioExistente);
     }
 
     @Override
@@ -98,7 +120,22 @@ public class UsuarioService implements IUsuarioService {
     }
 
     @Override
+    public Usuarios NuevoUsuario(String username, String password, String email) {
+        Usuarios usuarios = Usuarios.builder()
+                .username(username)
+                .password(new BCryptPasswordEncoder().encode(password))
+                .email(email)
+                .estado(1)
+                .build();
+
+        usuarioRepository.save(usuarios);
+
+        return usuarios;
+    }
+
+    @Override
     public boolean existePorUsername(String username) {
         return usuarioRepository.findByUsername(username).isPresent();
     }
+
 }
