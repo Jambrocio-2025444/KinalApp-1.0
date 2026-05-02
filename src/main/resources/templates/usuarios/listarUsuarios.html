@@ -1,14 +1,17 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
       th:replace="~{fragments/menu :: main}">
 
 <th:block th:fragment="content">
     <div class="page-header">
-        <h2><i class="bi bi-person-badge"></i> Lista de Usuarios</h2>
+        <h2><i class="bi bi-people"></i> Lista de Usuarios</h2>
         <div class="button-group">
-            <a href="/usuarios/NuevoUsuario" class="btn btn-primary">
-                <i class="bi bi-plus-lg"></i> Nuevo Usuario
-            </a>
+            <div sec:authorize="hasRole('ADMIN')">
+                <a href="/usuarios/NuevoUsuario" class="btn btn-primary">
+                    <i class="bi bi-plus-lg"></i> Nuevo Usuario
+                </a>
+            </div>
             <a href="/usuarios/BuscarUsuario" class="btn btn-outline-custom">
                 <i class="bi bi-search"></i> Buscar Usuario
             </a>
@@ -20,15 +23,12 @@
 
     <div class="card">
         <div class="card-body">
-            <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
-
             <div class="table-responsive">
                 <table class="table">
                     <thead>
                     <tr>
                         <th>Código</th>
                         <th>Username</th>
-                        <th>Password</th>
                         <th>Email</th>
                         <th>Rol</th>
                         <th>Estado</th>
@@ -39,23 +39,27 @@
                     <tr th:each="usuario : ${usuarios}">
                         <td th:text="${usuario.codigoUsuario}">Código</td>
                         <td th:text="${usuario.username}">Username</td>
-                        <td>••••••••</td>
                         <td th:text="${usuario.email}">Email</td>
-                        <td><span class="badge bg-info">${usuario.rol}</span></td>
+                        <td th:text="${usuario.rol}">Rol</td>
                         <td>
                             <span th:if="${usuario.estado == 1}" class="badge bg-success">Activo</span>
                             <span th:unless="${usuario.estado == 1}" class="badge bg-danger">Inactivo</span>
                         </td>
                         <td class="acciones">
-                            <a th:href="@{/usuarios/editar/{codigoUsuario}(codigoUsuario=${usuario.codigoUsuario})}"
-                               class="btn btn-outline-warning btn-sm">
-                                <i class="bi bi-pencil"></i> Editar
-                            </a>
-                            <a th:href="@{/usuarios/eliminar/{codigoUsuario}(codigoUsuario=${usuario.codigoUsuario})}"
-                               class="btn btn-outline-danger btn-sm"
-                               onclick="return confirm('¿Desea eliminar este Usuario?')">
-                                <i class="bi bi-trash"></i> Eliminar
-                            </a>
+                            <div sec:authorize="hasRole('ADMIN')">
+                                <a th:href="@{/usuarios/editar/{id}(id=${usuario.codigoUsuario})}"
+                                   class="btn btn-outline-warning btn-sm">
+                                    <i class="bi bi-pencil"></i> Editar
+                                </a>
+                                <a th:href="@{/usuarios/eliminar/{id}(id=${usuario.codigoUsuario})}"
+                                   class="btn btn-outline-danger btn-sm"
+                                   onclick="return confirm('¿Eliminar este usuario?')">
+                                    <i class="bi bi-trash"></i> Eliminar
+                                </a>
+                            </div>
+                            <div sec:authorize="!hasRole('ADMIN')">
+                                <span class="text-muted">Sin permisos</span>
+                            </div>
                         </td>
                     </tr>
                     </tbody>
