@@ -4,6 +4,7 @@ import com.joseAmbrocio.KinalApp.entity.Usuarios;
 import com.joseAmbrocio.KinalApp.service.IUsuarioService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,21 +18,12 @@ public class LoginController {
     @Autowired
     private IUsuarioService usuarioService;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     @GetMapping("/login")
     public String mostrarLogin() {
         return "login";
-    }
-
-    @PostMapping("/login")
-    public String procesarLogin(@RequestParam String username,@RequestParam String password, HttpSession session, Model model) {
-        Usuarios usuario = usuarioService.buscarPorUsername(username).orElse(null);
-        if (usuario != null && usuario.getPassword().equals(password)) {
-            session.setAttribute("usuario", usuario);
-            return "redirect:/";
-        } else {
-            model.addAttribute("error", "Usuario o contraseña incorrectos");
-            return "login";
-        }
     }
 
     @GetMapping("/logout")
@@ -47,7 +39,9 @@ public class LoginController {
     }
 
     @PostMapping("/registro")
-    public String registrarUsuario(@ModelAttribute Usuarios usuario, @RequestParam String confirmarPassword, Model model) {
+    public String registrarUsuario(@ModelAttribute Usuarios usuario,
+                                   @RequestParam String confirmarPassword,
+                                   Model model) {
         if (!usuario.getPassword().equals(confirmarPassword)) {
             model.addAttribute("error", "Las contraseñas no coinciden");
             return "registro";
@@ -58,7 +52,9 @@ public class LoginController {
             return "registro";
         }
 
-        usuario.setRol("USER");
+        usuario.setPassword(passwordEncoder.encode(usuario.getPassword()));
+
+        usuario.setRol("USUARIO");
         usuario.setEstado(1);
 
         usuarioService.guardar(usuario);
