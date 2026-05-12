@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      th:replace="~{fragments/menu :: main}">
+
+<th:block th:fragment="content">
+    <div class="page-header">
+        <h2><i class="bi bi-search"></i> Resultado de Búsqueda</h2>
+        <div>
+            <a href="/usuarios" class="btn btn-secondary">
+                <i class="bi bi-arrow-left"></i> Volver
+            </a>
+            <a href="/usuarios/BuscarUsuario" class="btn btn-primary">
+                <i class="bi bi-search"></i> Nueva Búsqueda
+            </a>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-body">
+            <div th:if="${encontrado == true}">
+                <h3 class="text-success mb-3">
+                    <i class="bi bi-check-circle-fill"></i> Usuario encontrado:
+                </h3>
+                <div class="table-responsive">
+                    <table class="table">
+                        <tbody>
+                        <tr>
+                            <th width="150">Código:</th>
+                            <td th:text="${usuarios.codigoUsuario}">—</td>
+                        </tr>
+                        <tr>
+                            <th>Username:</th>
+                            <td th:text="${usuarios.username}">—</td>
+                        </tr>
+                        <tr>
+                            <th>Password:</th>
+                            <td>••••••••</td>
+                        </tr>
+                        <tr>
+                            <th>Rol:</th>
+                            <td><span class="badge bg-info" th:text="${usuarios.rol}">—</span></td>
+                        </tr>
+                        <tr>
+                            <th>Estado:</th>
+                            <td>
+                                <span th:if="${usuarios.estado == 1}" class="badge bg-success">Activo</span>
+                                <span th:unless="${usuarios.estado == 1}" class="badge bg-danger">Inactivo</span>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="acciones">
+                    <div sec:authorize="hasRole('ADMIN')">
+                        <a th:href="@{/usuarios/editar/{id}(id=${usuarios.codigoUsuario})}"
+                           class="btn btn-outline-warning btn-sm">
+                            <i class="bi bi-pencil"></i> Editar
+                        </a>
+                        <a th:href="@{/usuarios/eliminar/{id}(id=${usuarios.codigoUsuario})}"
+                           class="btn btn-outline-danger btn-sm"
+                           onclick="return confirm('¿Eliminar este usuario?')">
+                            <i class="bi bi-trash"></i> Eliminar
+                        </a>
+                    </div>
+                    <div sec:authorize="!hasRole('ADMIN')">
+                        <span class="text-muted">Sin permisos</span>
+                    </div>
+                </div>
+            </div>
+
+            <div th:if="${encontrado == false}" class="alert alert-danger">
+                <i class="bi bi-exclamation-triangle-fill"></i>
+                <span th:text="${mensaje}"></span>
+            </div>
+        </div>
+    </div>
+</th:block>
+
+</html>

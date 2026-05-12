@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{fragments/menu :: main}">
+
+<th:block th:fragment="content">
+    <div class="page-header">
+        <h2><i class="bi bi-box-seam"></i> Lista de Productos</h2>
+        <div class="button-group">
+            <a href="/productos/NuevoProducto" class="btn btn-primary">
+                <i class="bi bi-plus-lg"></i> Nuevo Producto
+            </a>
+            <a href="/productos/BuscarProducto" class="btn btn-outline-custom">
+                <i class="bi bi-search"></i> Buscar Productos
+            </a>
+            <a href="/productos/activos" class="btn btn-outline-success">
+                <i class="bi bi-check-circle"></i> Productos Activos
+            </a>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-body">
+            <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
+
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>Código</th>
+                        <th>Nombre</th>
+                        <th>Precio</th>
+                        <th>Stock</th>
+                        <th>Estado</th>
+                        <th>Acciones</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="producto : ${producto}">
+                        <td th:text="${producto.codigoProducto}">Código</td>
+                        <td th:text="${producto.nombreProducto}">Nombre</td>
+                        <td th:text="${producto.precio}">Precio</td>
+                        <td th:text="${producto.stock}">Stock</td>
+                        <td>
+                            <span th:if="${producto.estado == 1}" class="badge bg-success">Activo</span>
+                            <span th:unless="${producto.estado == 1}" class="badge bg-danger">Inactivo</span>
+                        </td>
+                        <td class="acciones">
+                            <a th:href="@{/productos/editar/{codigoProducto}(codigoProducto=${producto.codigoProducto})}"
+                               class="btn btn-outline-warning btn-sm">
+                                <i class="bi bi-pencil"></i> Editar
+                            </a>
+                            <a th:href="@{/productos/eliminar/{codigoProducto}(codigoProducto=${producto.codigoProducto})}"
+                               class="btn btn-outline-danger btn-sm"
+                               onclick="return confirm('¿Desea eliminar este Producto?')">
+                                <i class="bi bi-trash"></i> Eliminar
+                            </a>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</th:block>
+
+</html>

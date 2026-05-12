@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{fragments/menu :: main}">
+
+<th:block th:fragment="content">
+    <div class="page-header">
+        <h2><i class="bi bi-list-check"></i> Lista de Detalles Venta</h2>
+        <div class="button-group">
+            <a href="/detalles/NuevoDetalle" class="btn btn-primary">
+                <i class="bi bi-plus-lg"></i> Nuevo Detalle Venta
+            </a>
+            <a href="/detalles/BuscarDetalle" class="btn btn-outline-custom">
+                <i class="bi bi-search"></i> Buscar Detalle Venta
+            </a>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-body">
+            <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
+
+            <div th:if="${detalle != null and !detalle.empty}">
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th>Código</th>
+                            <th>Venta</th>
+                            <th>Producto</th>
+                            <th>Cantidad</th>
+                            <th>Precio Unitario</th>
+                            <th>Subtotal</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="item : ${detalle}">
+                            <td th:text="${item.codigoDetalleVenta}">Código</td>
+                            <td th:text="${item.ventas.codigoVenta}">Venta</td>
+                            <td th:text="${item.producto.nombreProducto}">Producto</td>
+                            <td th:text="${item.cantidad}">Cantidad</td>
+                            <td th:text="${item.precioUnitario}">Precio Unitario</td>
+                            <td th:text="${item.subtotal}">Subtotal</td>
+                            </td>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div th:if="${detalle == null or detalle.empty}" class="alert alert-info">
+                <i class="bi bi-info-circle"></i> No hay detalles de ventas registrados.
+            </div>
+        </div>
+    </div>
+</th:block>
+
+</html>

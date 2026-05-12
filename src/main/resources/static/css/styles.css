@@ -1,0 +1,278 @@
+/* --- VARIABLES UNIFICADAS (USANDO TU PALETA) --- */
+:root {
+    --primary-orange: #F27420;
+    --deep-blue: #0B2D3F;
+    --accent-cyan: #009B97;
+    --dark-bg: #05161f;
+    --glass-bg: rgba(255, 255, 255, 0.05);
+    --glass-border: rgba(255, 255, 255, 0.1);
+    --primary-gradient: linear-gradient(135deg, #0B2D3F 0%, #05161f 100%);
+    --orange-gradient: linear-gradient(135deg, #F27420 0%, #ff7e5f 100%);
+    --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+/* --- RESET Y BASE --- */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Poppins', 'Segoe UI', sans-serif;
+    background-color: var(--dark-bg);
+    background-image: radial-gradient(circle at top right, #0b2d3f 0%, #05161f 100%);
+    color: white;
+    min-height: 100vh;
+}
+
+/* --- LAYOUT ESTRUCTURA (SideBar + Main) --- */
+.kinal-layout {
+    display: flex;
+}
+
+.kinal-sidebar {
+    width: 260px;
+    background: #081d29;
+    border-right: 1px solid var(--glass-border);
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    height: 100vh;
+    z-index: 1000;
+}
+
+.sidebar-header {
+    padding: 30px 20px;
+    text-align: center;
+    background: var(--deep-blue);
+    border-bottom: 1px solid var(--glass-border);
+}
+
+.sidebar-logo {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    border: 2px solid var(--primary-orange);
+    margin-bottom: 10px;
+}
+
+.sidebar-nav a {
+    color: rgba(255,255,255,0.7);
+    padding: 12px 25px;
+    text-decoration: none;
+    display: block;
+    transition: 0.3s;
+}
+
+.sidebar-nav a:hover {
+    background: var(--glass-bg);
+    color: var(--primary-orange);
+    padding-left: 35px;
+}
+
+.kinal-main {
+    flex-grow: 1;
+    margin-left: 260px; /* IMPORTANTE: Para que no se encime con el sidebar */
+    padding: 20px;
+}
+
+/* --- COMPONENTES QUE YA TENÍAS (ADAPTADOS) --- */
+
+/* Tarjetas y Contenedores */
+.container, .stat-card, .card {
+    background: var(--glass-bg) !important;
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--glass-border) !important;
+    border-radius: 20px;
+    color: white !important;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+/* Tablas */
+table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0 12px;
+}
+
+th {
+    color: var(--accent-cyan);
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    padding: 10px 20px;
+}
+
+td {
+    background: rgba(255, 255, 255, 0.03);
+    padding: 18px 20px;
+    border: none;
+    color: white;
+}
+
+td:first-child { border-radius: 12px 0 0 12px; }
+td:last-child { border-radius: 0 12px 12px 0; }
+
+tr:hover td {
+    background: rgba(255, 255, 255, 0.08);
+    transform: translateY(-2px);
+    transition: var(--transition);
+}
+
+/* Botones */
+.btn, .btn-kinal {
+    background: var(--orange-gradient);
+    color: white;
+    border-radius: 12px;
+    padding: 12px 24px;
+    border: none;
+    font-weight: 600;
+    transition: var(--transition);
+    cursor: pointer;
+    display: inline-block;
+    text-decoration: none;
+}
+
+.btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 5px 15px rgba(242, 116, 32, 0.4);
+}
+
+.btn-outline-custom {
+    border: 1px solid var(--accent-cyan) !important;
+    color: var(--accent-cyan) !important;
+    background: transparent;
+}
+
+.btn-outline-custom:hover {
+    background: var(--accent-cyan) !important;
+    color: white !important;
+}
+
+/* Inputs */
+input, select {
+    background: rgba(255, 255, 255, 0.05) !important;
+    border: 1px solid var(--glass-border) !important;
+    color: white !important;
+    border-radius: 10px;
+    padding: 10px;
+}
+
+input:focus {
+    border-color: var(--accent-cyan) !important;
+    outline: none;
+}
+
+/* Iconos Dashboard */
+.stat-icon.icon-orange { color: var(--primary-orange) !important; }
+.stat-icon.icon-cyan { color: var(--accent-cyan) !important; }
+
+/* Contenedor con scroll */
+.table-responsive {
+    overflow-x: auto;
+    width: 100%;
+}
+
+/* Tabla con ancho fijo */
+table {
+    width: 100%;
+    min-width: 600px;
+    border-collapse: collapse;
+}
+
+/* Espaciado de celdas */
+th, td {
+    padding: 12px 15px !important;
+    text-align: left;
+    white-space: nowrap;
+}
+
+/* Que las celdas no se peguen */
+td:first-child, th:first-child {
+    padding-left: 20px !important;
+}
+
+td:last-child, th:last-child {
+    padding-right: 20px !important;
+}
+
+/* Botones pequeños */
+.btn-sm {
+    display: inline-block;
+    padding: 6px 12px;
+    margin: 0 3px;
+    font-size: 0.8rem;
+}
+
+/* --- MEJORAS PARA FORMULARIOS --- */
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+    color: var(--accent-cyan);
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    width: 100%;
+    padding: 10px 12px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    color: white;
+    font-size: 0.9rem;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+    outline: none;
+    border-color: var(--primary-orange);
+}
+
+/* Layout de dos columnas para formularios */
+.form-row {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.form-row .form-group {
+    flex: 1;
+    min-width: 200px;
+}
+
+/* Botones del formulario */
+.form-actions {
+    display: flex;
+    gap: 15px;
+    margin-top: 25px;
+    flex-wrap: wrap;
+}
+
+/* Valores calculados (subtotal) */
+.form-preview {
+    background: rgba(242, 116, 32, 0.15);
+    padding: 15px;
+    border-radius: 10px;
+    margin: 15px 0;
+    text-align: right;
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: var(--primary-orange);
+}
+
+select.form-control {
+    background-color: rgba(255, 255, 255, 0.1) !important;
+    color: white !important;
+}
+
+select.form-control option {
+    background-color: #1a1a2e !important;
+    color: white !important;
+}

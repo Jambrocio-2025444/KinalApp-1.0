@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{fragments/menu :: main}">
+
+<th:block th:fragment="content">
+    <div class="page-header">
+        <h2><i class="bi bi-person-plus"></i> Nuevo Usuario</h2>
+        <a href="/usuarios" class="btn btn-secondary">
+            <i class="bi bi-arrow-left"></i> Volver
+        </a>
+    </div>
+
+    <div class="card">
+        <div class="card-body">
+            <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
+
+            <form action="/usuarios/guardar" method="post">
+                <div class="form-group">
+                    <label>Username:</label>
+                    <input type="text" name="username" class="form-control" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Password:</label>
+                    <input type="password" name="password" class="form-control" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Email:</label>
+                    <input type="email" name="email" class="form-control" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Rol:</label>
+                    <select name="rol" class="form-control" required>
+                        <option value="">-- Seleccione un rol --</option>
+                        <option value="ADMIN">Administrador</option>
+                        <option value="USER">Usuario</option>
+                        <option value="GUEST">Invitado</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Estado:</label>
+                    <select name="estado" class="form-control">
+                        <option value="1">Activo</option>
+                        <option value="0">Inactivo</option>
+                    </select>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="bi bi-save"></i> Guardar
+                    </button>
+                    <a href="/usuarios" class="btn btn-secondary">
+                        <i class="bi bi-x-circle"></i> Cancelar
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</th:block>
+
+</html>

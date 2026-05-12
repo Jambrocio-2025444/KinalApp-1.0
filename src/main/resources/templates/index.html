@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{fragments/menu :: main}">
+
+<th:block th:fragment="content">
+  <div class="row g-4">
+    <div class="col-md-3">
+      <div class="stat-card" style="padding: 30px 20px;">
+        <div class="stat-icon icon-orange" style="font-size: 3rem;">
+          <i class="bi bi-people"></i>
+        </div>
+        <div class="stat-number" style="font-size: 2.5rem; font-weight: bold; margin: 15px 0;" th:text="${totalClientes}">0</div>
+        <div class="stat-label" style="font-size: 1.1rem;">Clientes</div>
+      </div>
+    </div>
+
+    <div class="col-md-3">
+      <div class="stat-card" style="padding: 30px 20px;">
+        <div class="stat-icon icon-cyan" style="font-size: 3rem;">
+          <i class="bi bi-person-badge"></i>
+        </div>
+        <div class="stat-number" style="font-size: 2.5rem; font-weight: bold; margin: 15px 0;" th:text="${totalUsuarios}">0</div>
+        <div class="stat-label" style="font-size: 1.1rem;">Usuarios</div>
+      </div>
+    </div>
+
+    <div class="col-md-3">
+      <div class="stat-card" style="padding: 30px 20px;">
+        <div class="stat-icon icon-orange" style="font-size: 3rem;">
+          <i class="bi bi-box-seam"></i>
+        </div>
+        <div class="stat-number" style="font-size: 2.5rem; font-weight: bold; margin: 15px 0;" th:text="${totalProductos}">0</div>
+        <div class="stat-label" style="font-size: 1.1rem;">Productos</div>
+      </div>
+    </div>
+
+    <div class="col-md-3">
+      <div class="stat-card" style="padding: 30px 20px;">
+        <div class="stat-icon icon-cyan" style="font-size: 3rem;">
+          <i class="bi bi-cart-check"></i>
+        </div>
+        <div class="stat-number" style="font-size: 2.5rem; font-weight: bold; margin: 15px 0;" th:text="${totalVentas}">0</div>
+        <div class="stat-label" style="font-size: 1.1rem;">Ventas</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row mt-4">
+    <div class="col-md-6">
+      <div class="card shadow">
+        <div class="card-header" style="font-size: 1.2rem; padding: 15px 20px;">
+          <i class="bi bi-lightning-charge-fill me-2"></i> Accesos Rápidos
+        </div>
+        <div class="card-body" style="padding: 25px;">
+          <div class="d-grid gap-3">
+            <a href="/clientes/NuevoCliente" class="btn btn-outline-custom" style="padding: 12px; font-size: 1rem;">
+              <i class="bi bi-plus-circle me-2"></i> Nuevo Cliente
+            </a>
+            <a href="/ventas/NuevaVenta" class="btn btn-outline-custom" style="padding: 12px; font-size: 1rem;">
+              <i class="bi bi-cart-plus me-2"></i> Nueva Venta
+            </a>
+            <a href="/productos/NuevoProducto" class="btn btn-outline-custom" style="padding: 12px; font-size: 1rem;">
+              <i class="bi bi-plus-square me-2"></i> Nuevo Producto
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-6">
+      <div class="card shadow">
+        <div class="card-header" style="font-size: 1.2rem; padding: 15px 20px;">
+          <i class="bi bi-info-circle-fill me-2"></i> Estado del Sistema
+        </div>
+        <div class="card-body" style="padding: 25px;">
+          <p style="font-size: 1rem; margin-bottom: 15px;">
+            <i class="bi bi-check-circle-fill text-success-custom me-2"></i> Servidor:
+            <span class="badge bg-success" style="font-size: 0.85rem;">Activo</span>
+          </p>
+          <p style="font-size: 1rem; margin-bottom: 15px;">
+            <i class="bi bi-database me-2" style="color: var(--accent-cyan);"></i> Base de Datos:
+            <span class="text-white-50">MySQL</span>
+          </p>
+          <p style="font-size: 1rem;">
+            <i class="bi bi-calendar3 me-2" style="color: var(--primary-orange);"></i> Fecha:
+            <span class="text-white-50" th:text="${#dates.format(#dates.createNow(), 'dd/MM/yyyy')}"></span>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</th:block>
+
+</html>
