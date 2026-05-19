@@ -7,7 +7,7 @@
     <div class="page-header">
         <h2><i class="bi bi-people"></i> Lista de Clientes</h2>
         <div class="button-group">
-            <div sec:authorize="isAuthenticated()">
+            <div sec:authorize="hasRole('ROLE_ADMIN')">
                 <a href="/clientes/NuevoCliente" class="btn btn-primary">
                     <i class="bi bi-plus-lg"></i> Nuevo Cliente
                 </a>
