@@ -22,7 +22,6 @@
             <th>Fecha</th>
             <th>Total</th>
             <th>Estado</th>
-            <th>Acciones</th>
           </tr>
           </thead>
           <tbody>
@@ -33,12 +32,6 @@
             <td th:text="${item.fechaVenta}">Fecha</td>
             <td th:text="${item.total}">Total</td>
             <td><span class="badge bg-success">Activo</span></td>
-            <td class="acciones">
-              <a th:href="@{/ventas/editar/{codigoVenta}(codigoVenta=${item.codigoVenta})}"
-                 class="btn btn-outline-warning btn-sm">
-                <i class="bi bi-pencil"></i> Editar
-              </a>
-            </td>
           </tr>
           </tbody>
         </table>
