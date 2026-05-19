@@ -33,13 +33,25 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .httpBasic(Customizer.withDefaults())
                 .authorizeHttpRequests(auth -> auth
+                        //Permisos solo para admin
+                        .requestMatchers("/usuarios/editar/**").hasRole("ADMIN")
+                        .requestMatchers("/usuarios/eliminar/**").hasRole("ADMIN")
+                        .requestMatchers("/clientes/editar/**").hasRole("ADMIN")
+                        .requestMatchers("/clientes/eliminar/**").hasRole("ADMIN")
+
+                        //otros permisos
                         .requestMatchers("/css/**", "/images/**", "/login", "/registro", "/Admin" ).permitAll()
                         .requestMatchers("/clientes/**").hasAnyRole("USUARIO","ADMIN")
                         .requestMatchers("/ventas/**").hasRole("ADMIN")
                         .requestMatchers("/productos/**").hasAnyRole( "USUARIO","ADMIN")
                         .requestMatchers("/detalles/**").hasRole("ADMIN")
                         .requestMatchers("/usuarios/**").hasAnyRole("USUARIO" , "ADMIN")
+
+
+
                         .anyRequest().authenticated()
+
+
                 )
                 .formLogin(form -> form
                         .loginPage("/login")
